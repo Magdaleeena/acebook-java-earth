@@ -36,6 +36,10 @@ source ~/.zshrc
 > The database migrations will run automatically at this point
 - Visit `http://localhost:8080/` to sign up
 
+## Login details
+Username: admin@admin.com
+Password: TeamEarth25!
+
 ## Running the tests
 
 - Install chromedriver using `brew install chromedriver`
