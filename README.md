@@ -21,6 +21,17 @@ Below, you'll find specific learning objectives for each tool.
 - Create two new Postgres databases called `acebook_springboot_development` and `acebook_springboot_test`
 - Install Maven `brew install maven`
 - [Set up Auth0](https://journey.makers.tech/pages/auth0) (you only need the "Create an Auth0 app" section)
+- If you are running into Java compile error: run these commands: 
+```bash
+/usr/libexec/java_home
+```
+```bash
+export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH=$JAVA_HOME/bin:$PATH
+```
+```bash
+source ~/.zshrc
+```
 - Build the app and start the server, using the Maven command `mvn spring-boot:run`
 > The database migrations will run automatically at this point
 - Visit `http://localhost:8080/` to sign up
