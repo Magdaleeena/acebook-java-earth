@@ -8,7 +8,7 @@
     </head>
     <body>
 
-    <h1>Posts</h1>
+<h1>Posts</h1>
 
     <h2 sec:authorize="isAnonymous()" id="greeting">
         Welcome to Acebook
@@ -20,15 +20,34 @@
         Hello <span sec:authentication="principal.attributes['email']"></span>
     </div>
 
-    <form action="#" th:action="@{/posts}" th:object="${post}" method="post">
-        <p>Content: <input type="text" th:field="*{content}" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-    </form>
+<form action="#" th:action="@{/posts}" th:object="${post}" method="post">
+    <p>Content: <input type="text" th:field="*{content}" id="content" maxlength="250" /></p>
+    <div id="counterDisplay">0/250</div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === 'emptyContent') {
+            document.write('<p style="color: red" >Content must not be blank</p>')
+        }
+        if (params.get('error') === 'noUrl') {
+            document.write('<p style="color: red" >Content must not include a URL</p>')
+        }
+    </script>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
 
     <ul class="post-main"  th:each="post: ${posts}">
         <li th:text="${post.content}" />
     </ul>
-
+      
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ta = document.getElementById('content');
+        const counter = document.getElementById('counterDisplay');
+        ta.addEventListener('input', () => {
+            counter.textContent = `${ta.value.length}/250`;
+        });
+    });
+</script>
     <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
 
     </body>

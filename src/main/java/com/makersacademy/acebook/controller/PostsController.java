@@ -27,6 +27,12 @@ public class PostsController {
 
     @PostMapping("/posts")
     public RedirectView create(@ModelAttribute Post post) {
+        if (post.getContent() == null|| post.getContent().isEmpty()) {
+            return new RedirectView("/posts?error=emptyContent");
+        }
+        if (post.getContent().matches(".*(https?://|www\\.).*")) {
+            return new RedirectView("/posts?error=noUrl");
+        }
         repository.save(post);
         return new RedirectView("/posts");
     }
