@@ -4,14 +4,20 @@
     <head lang="en">
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-        <link rel="stylesheet" href="/main.css" />
+        <link rel="stylesheet" type="text/css" href="/css/styles.css" />
     </head>
     <body>
 
     <h1>Posts</h1>
 
+    <h2 sec:authorize="isAnonymous()" id="greeting">
+        Welcome to Acebook
+    </h2>
+    <a sec:authorize="isAnonymous()" href="/register">Log in</a>
+
+
     <div sec:authorize="isAuthenticated()" id="greeting">
-        Signed in as <span sec:authentication="principal.attributes['email']"></span>
+        Hello <span sec:authentication="principal.attributes['email']"></span>
     </div>
 
     <form action="#" th:action="@{/posts}" th:object="${post}" method="post">
@@ -19,9 +25,11 @@
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
 
-    <ul th:each="post: ${posts}">
+    <ul class="post-main"  th:each="post: ${posts}">
         <li th:text="${post.content}" />
     </ul>
+
+    <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
 
     </body>
 </html>

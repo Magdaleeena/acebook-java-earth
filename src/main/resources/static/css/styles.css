@@ -1,0 +1,26 @@
+a {
+    color: #FF7043;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: #FFE0B2;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+a:hover {
+    background-color: #FFAB91;
+    color: white;
+}
+
+.posts-main {
+    border-collapse: collapse;
+}
+
+.post-main {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    text-align: left;
+    margin-bottom: 0.5rem;;
+}

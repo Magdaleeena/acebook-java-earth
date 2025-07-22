@@ -37,6 +37,6 @@ public class SignUpTest {
         driver.findElement(By.name("action")).click();
         driver.findElement(By.name("action")).click();
         String greetingText = driver.findElement(By.id("greeting")).getText();
-        Assert.assertEquals("Signed in as " + email, greetingText);
+        Assert.assertEquals("Welcome to Acebook " + email, greetingText);
     }
 }
