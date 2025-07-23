@@ -26,7 +26,18 @@
     </form>
 
     <ul class="post-main"  th:each="post: ${posts}">
-        <li th:text="${post.content}" />
+        <li>
+            <p th:text="${post.content}"></p>
+            <p>Likes: <span th:text="${post.likeCount}">0</span></p>
+
+            <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
+                <button type="submit">👍 Like</button>
+            </form>
+
+            <form method="post" th:action="@{'/posts/' + ${post.id} + '/unlike'}">
+                <button type="submit">👎 Unlike</button>
+            </form>
+        </li>
     </ul>
 
     <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
