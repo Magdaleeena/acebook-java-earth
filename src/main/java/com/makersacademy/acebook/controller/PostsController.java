@@ -36,4 +36,29 @@ public class PostsController {
         repository.save(post);
         return new RedirectView("/posts");
     }
+
+    @PostMapping("/posts/{id}/like")
+    public RedirectView likePost(@PathVariable Long id) {
+        Post post = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        post.setLikeCount(post.getLikeCount() + 1);
+        repository.save(post);
+
+        return new RedirectView("/posts");
+    }
+
+    @PostMapping("/posts/{id}/unlike")
+    public RedirectView unlikePost(@PathVariable Long id) {
+        Post post = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (post.getLikeCount() > 0) {
+            post.setLikeCount(post.getLikeCount() - 1);
+            repository.save(post);
+        }
+
+        return new RedirectView("/posts");
+    }
+
 }
