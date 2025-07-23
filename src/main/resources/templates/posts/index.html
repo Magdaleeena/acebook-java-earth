@@ -18,6 +18,8 @@
 
     <div sec:authorize="isAuthenticated()" id="greeting">
         Hello <span sec:authentication="principal.attributes['nickname']"></span>
+        <p th:if="${user == null}">🚨 User is null</p>
+        <p th:unless="${user == null}">✅ User: <span th:text="${user.display_name}"></span></p>
     </div>
 
 <form action="#" th:action="@{/posts}" th:object="${post}" method="post">

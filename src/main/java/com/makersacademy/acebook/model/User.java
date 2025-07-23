@@ -32,7 +32,6 @@ public class User {
         this.enabled = enabled;
     }
 
-
     public Long getUserId() {
         return this.id;
     }

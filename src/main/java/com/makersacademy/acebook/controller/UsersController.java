@@ -5,6 +5,7 @@ import com.makersacademy.acebook.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.ui.Model;
@@ -20,8 +21,17 @@ public class UsersController {
     @Autowired
     UserRepository userRepository;
 
+    @ModelAttribute("user")
+    public User addLoggedInUserToModel(Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof DefaultOidcUser oidcUser) {
+            String email = (String) oidcUser.getAttributes().get("email");
+            return userRepository.findUserByUsername(email).orElse(null);
+        }
+        return null; // no user logged in
+    }
+
     @GetMapping("/users/after-login")
-    public RedirectView afterLogin() {
+    public RedirectView afterLogin(HttpSession session) {
         DefaultOidcUser principal = (DefaultOidcUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -37,9 +47,10 @@ public class UsersController {
             }
         }
         String displayName = displayNameCon.toString();
-        userRepository
+        User user = userRepository
                 .findUserByUsername(username)
                 .orElseGet(() -> userRepository.save(new User(username, displayName)));
+        session.setAttribute("user", user);
         return new RedirectView("/posts");
     }
 

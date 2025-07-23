@@ -3,6 +3,7 @@ package com.makersacademy.acebook.controller;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +21,9 @@ public class PostsController {
     PostRepository repository;
 
     @GetMapping("/posts")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
         Iterable<Post> posts = repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
@@ -28,16 +31,14 @@ public class PostsController {
     }
 
     @PostMapping("/posts")
-    public RedirectView create(@ModelAttribute Post post, @AuthenticationPrincipal User user) {
+    public RedirectView create(@ModelAttribute Post post) {
         if (post.getContent() == null|| post.getContent().isEmpty()) {
             return new RedirectView("/posts?error=emptyContent");
         }
         if (post.getContent().matches(".*(https?://|www\\.).*")) {
             return new RedirectView("/posts?error=noUrl");
         }
-        String postContent = post.getContent();
-        String userName = user.getDisplay_name();
-        repository.save(new Post(postContent, userName));
+        repository.save(post);
         return new RedirectView("/posts");
     }
 
