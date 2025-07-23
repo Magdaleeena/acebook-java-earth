@@ -7,22 +7,29 @@
         <link rel="stylesheet" type="text/css" href="/css/styles.css" />
     </head>
     <body>
+    <div class="page-container">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <h1>AceBook</h1>
+                <a href="/">Feed</a>
+                <a sec:authorize="isAnonymous()" href="/register">Log In</a>
+                <a href="/profile/{id}">Profile</a>
+                <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
+            </nav>
+        <!-- Main Content -->
+        <main class="main-content">
 
-<h1>Posts</h1>
-
-    <h2 sec:authorize="isAnonymous()" id="greeting">
-        Welcome to Acebook
-    </h2>
-    <a sec:authorize="isAnonymous()" href="/register">Log in</a>
-
-
-    <div sec:authorize="isAuthenticated()" id="greeting">
-        Hello <span sec:authentication="principal.attributes['email']"></span>
-    </div>
-
+            <div class="header">
+            <img src="/images/profile-img.png" alt="Profile Picture" class="profile-picture">
+            <h2 sec:authorize="isAnonymous()" id="greeting">Welcome to Acebook</h2>
+            <h2 sec:authorize="isAuthenticated()" id="greeting">Hello <span sec:authentication="principal.attributes['email']"></span>, here's what you've missed</h2>
+            </div>
 <form action="#" th:action="@{/posts}" th:object="${post}" method="post">
-    <p>Content: <input type="text" th:field="*{content}" id="content" maxlength="250" /></p>
-    <div id="counterDisplay">0/250</div>
+    <div class="post-input">
+        <textarea th:field="*{content}" id="content" maxlength="250" placeholder="What's on your mind?"></textarea>
+        <div id="counterDisplay">0/250</div>
+        <button type="submit">Post</button>
+    </div>
     <script>
         const params = new URLSearchParams(window.location.search);
         if (params.get('error') === 'emptyContent') {
@@ -32,7 +39,6 @@
             document.write('<p style="color: red" >Content must not include a URL</p>')
         }
     </script>
-    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
 </form>
 
     <ul class="post-main"  th:each="post: ${posts}">
@@ -41,14 +47,15 @@
             <p>Likes: <span th:text="${post.likeCount}">0</span></p>
 
             <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
-                <button type="submit">👍 Like</button>
+                <button type="submit">👍</button>
             </form>
 
             <form method="post" th:action="@{'/posts/' + ${post.id} + '/unlike'}">
-                <button type="submit">👎 Unlike</button>
+                <button type="submit">👎</button>
             </form>
         </li>
     </ul>
+    </main>
       
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -59,7 +66,6 @@
         });
     });
 </script>
-    <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
-
+    </div>
     </body>
 </html>

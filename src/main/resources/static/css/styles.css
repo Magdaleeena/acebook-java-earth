@@ -1,26 +1,146 @@
-a {
-    color: #FF7043;
-    text-decoration: none;
-    font-size: 1.1em;
-    padding: 8px 14px;
-    border-radius: 8px;
-    background-color: #FFE0B2;
-    transition: all 0.2s ease;
-    display: inline-block;
+/* Base reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+/* Container uses flex layout */
+.page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  min-height: 100vh;
+  background: white;
 }
 
-a:hover {
-    background-color: #FFAB91;
-    color: white;
+/* Left sidebar */
+
+
+/* Sidebar */
+.sidebar {
+  border-radius: 20px;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 250px;
+  height: 25vh;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  padding: 1rem;
+  position: sticky;
+  box-sizing: border-box;
 }
 
-.posts-main {
-    border-collapse: collapse;
+.sidebar h1 {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
 }
 
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  min-height: 75vh;
+  box-sizing: border-box;
+}
+
+/* Input box styling */
+.post-input {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+  position: sticky;
+}
+
+.post-input textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem;
+  resize: vertical;
+  font-size: 1rem;
+  box-sizing: border-box;
+  position: sticky;
+}
+
+.post-input button {
+  margin-top: 0.5rem;
+  background: #3b82f6;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  float: right;
+  position: sticky;
+}
+
+/* Counter display alignment */
+#counterDisplay {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Posts styling */
 .post-main {
-    border: 1px solid #999;
-    padding: 0.5rem;
-    text-align: left;
-    margin-bottom: 0.5rem;;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+
+.post-main li {
+  background: white;
+  padding: 16px;
+  margin: 20px 0;
+  max-width: 2500px;
+  border-radius: 12px;
+  list-style: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.post-main li p:first-child {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.post-main li p:nth-child(2) {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.post-main li form {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.post-main li button {
+  background: #f0f2f5;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.post-main li button:hover {
+  background: #e2e6ea;
 }
