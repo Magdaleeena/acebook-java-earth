@@ -16,8 +16,11 @@ public class Post {
     private Long id;
     private String content;
     private int likeCount;
+    private String username;
 
-    public Post(String content) {
+    public Post(String content, String username) {
         this.content = content;
+        this.username = username;
     }
+
 }

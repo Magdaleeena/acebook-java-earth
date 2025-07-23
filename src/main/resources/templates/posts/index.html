@@ -17,7 +17,7 @@
 
 
     <div sec:authorize="isAuthenticated()" id="greeting">
-        Hello <span sec:authentication="principal.attributes['email']"></span>
+        Hello <span sec:authentication="principal.attributes['nickname']"></span>
     </div>
 
 <form action="#" th:action="@{/posts}" th:object="${post}" method="post">

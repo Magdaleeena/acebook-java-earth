@@ -1,0 +1,8 @@
+ALTER TABLE posts
+DROP COLUMN user_id,
+ADD COLUMN username VARCHAR(50) NOT NULL UNIQUE;
+
+ALTER TABLE posts
+ADD CONSTRAINT fk_username
+FOREIGN KEY (username)
+REFERENCES users(username);

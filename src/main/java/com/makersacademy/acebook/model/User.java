@@ -13,19 +13,32 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    private String display_name;
     private boolean enabled;
 
     public User() {
         this.enabled = TRUE;
     }
 
-    public User(String username) {
+    public User(String username, String displayName) {
         this.username = username;
+        this.display_name = displayName;
         this.enabled = TRUE;
     }
 
-    public User(String username, boolean enabled) {
+    public User(String username, String displayName, boolean enabled) {
         this.username = username;
+        this.display_name = displayName;
         this.enabled = enabled;
     }
+
+
+    public Long getUserId() {
+        return this.id;
+    }
+
+    public void setId(Long Id) {
+        this.id = id;
+    }
+
 }

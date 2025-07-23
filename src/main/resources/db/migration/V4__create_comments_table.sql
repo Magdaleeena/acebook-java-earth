@@ -1,0 +1,6 @@
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    content VARCHAR(250) NOT NULL,
+    post_id INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT now()
+);
