@@ -23,4 +23,5 @@ public class Post {
     public Post(String content) {
         this.content = content;
     }
+    public Post(Integer likeCount) {this.likeCount = likeCount;}
 }
