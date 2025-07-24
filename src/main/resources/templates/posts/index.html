@@ -53,6 +53,15 @@
             <form method="post" th:action="@{'/posts/' + ${post.id} + '/unlike'}">
                 <button type="submit">👎</button>
             </form>
+            <ul class="comment-list">
+                <li th:each="comment : ${post.comments}">
+                    <p th:text="${comment.content}"></p>
+                </li>
+            </ul>
+            <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
+                <input type="text" name="content" maxlength="500" placeholder="Add a comment..." />
+                <button type="submit">Comment</button>
+            </form>
         </li>
     </ul>
     </main>
