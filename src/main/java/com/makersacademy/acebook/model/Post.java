@@ -1,9 +1,9 @@
 package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
-
 import lombok.Data;
 import lombok.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,6 +16,9 @@ public class Post {
     private Long id;
     private String content;
     private int likeCount;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     public Post(String content) {
         this.content = content;
