@@ -16,11 +16,22 @@ public class Post {
     private Long id;
     private String content;
     private int likeCount;
-    private String username;
 
-    public Post(String content, String username) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", referencedColumnName = "username")
+    private User user;
+
+    public Post(String content, User user) {
         this.content = content;
-        this.username = username;
+        this.user = user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    public String getDisplay_name() {
+        return user != null ? user.getDisplay_name() : null;
+    }
 }

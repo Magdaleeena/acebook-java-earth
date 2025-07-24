@@ -17,9 +17,11 @@
 
 
     <div sec:authorize="isAuthenticated()" id="greeting">
-        Hello <span sec:authentication="principal.attributes['nickname']"></span>
-        <p th:if="${user == null}">🚨 User is null</p>
-        <p th:unless="${user == null}">✅ User: <span th:text="${user.display_name}"></span></p>
+        <p th:if="${user == null}">User is null</p>
+        <p th:if="${user != null}">
+            Hello
+            <a th:href="@{/profile/{id}(id=${user.id})}" th:text="${user.display_name}">user</a>
+        </p>
     </div>
 
 <form action="#" th:action="@{/posts}" th:object="${post}" method="post">

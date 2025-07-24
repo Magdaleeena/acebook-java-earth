@@ -36,8 +36,7 @@ public class User {
         return this.id;
     }
 
-    public void setId(Long Id) {
-        this.id = id;
-    }
-
+//    public void setId(Long Id) {
+//        this.id = id;
+//    }
 }

@@ -27,7 +27,7 @@ public class UsersController {
             String email = (String) oidcUser.getAttributes().get("email");
             return userRepository.findUserByUsername(email).orElse(null);
         }
-        return null; // no user logged in
+        return null;
     }
 
     @GetMapping("/users/after-login")

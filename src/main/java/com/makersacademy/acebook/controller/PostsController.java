@@ -31,13 +31,19 @@ public class PostsController {
     }
 
     @PostMapping("/posts")
-    public RedirectView create(@ModelAttribute Post post) {
+    public RedirectView create(@ModelAttribute Post post, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            System.out.println("User is NULL in POST /posts");
+            return new RedirectView("/login");
+        }
         if (post.getContent() == null|| post.getContent().isEmpty()) {
             return new RedirectView("/posts?error=emptyContent");
         }
         if (post.getContent().matches(".*(https?://|www\\.).*")) {
             return new RedirectView("/posts?error=noUrl");
         }
+        post.setUser(user);
         repository.save(post);
         return new RedirectView("/posts");
     }
