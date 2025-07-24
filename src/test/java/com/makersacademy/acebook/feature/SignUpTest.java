@@ -52,4 +52,16 @@ public class SignUpTest {
         String actualGreetingText = greetingTextLocator.getText();
         Assert.assertEquals("Hello " + email, actualGreetingText);
     }
+
+    @Test
+    public void userCanPostAPost()
+    {
+        successfulSignUpAlsoLogsInUser();
+        driver.findElement(By.name("content")).sendKeys("I can post");
+        WebElement characterCountLocator = driver.findElement(By.id("counterDisplay"));
+        String actualCharacterCount = characterCountLocator.getText();
+        Assert.assertEquals("10/250", actualCharacterCount);
+        WebElement submitButtonLocator = driver.findElement(By.xpath("//input[@value='Submit']"));
+        submitButtonLocator.click();
+    }
 }
