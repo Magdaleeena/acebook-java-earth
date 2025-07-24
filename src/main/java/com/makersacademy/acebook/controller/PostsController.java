@@ -57,6 +57,7 @@ public class PostsController {
             post.setLikeCount(post.getLikeCount() - 1);
             repository.save(post);
         }
+//        should we have error handling here? what happens if the like count is zero?
 
         return new RedirectView("/posts");
     }

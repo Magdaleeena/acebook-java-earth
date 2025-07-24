@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -41,12 +42,14 @@ public class SignUpTest {
         driver.findElement(By.name("email")).sendKeys(email);
         driver.findElement(By.name("password")).sendKeys("P@55qw0rd");
         driver.findElement(By.name("action")).click();
-        // there are two buttons on the screen so selecting the one with the text Accept and clicking it
-        // the screen can take a few seconds to load so added a wait timer for consistency
+        // the page can take a few seconds to load so added a wait timer for consistency
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        // there are two buttons on the screen so selecting the one with the text 'Accept' and clicking it
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Accept']")));
         driver.findElement(By.xpath("//button[text()='Accept']")).click();
-        String greetingText = driver.findElement(By.id("greeting")).getText();
-        Assert.assertEquals("Hello " + email, greetingText);
+        // the final page can take a few seconds to load so another wait timer is needed
+        WebElement greetingTextLocator = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.id("greeting")));
+        String actualGreetingText = greetingTextLocator.getText();
+        Assert.assertEquals("Hello " + email, actualGreetingText);
     }
 }
