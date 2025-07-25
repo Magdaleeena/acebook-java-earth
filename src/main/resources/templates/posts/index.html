@@ -1,80 +1,96 @@
 <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org"
-          xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
-    <head lang="en">
-        <meta charset="UTF-8"/>
-        <title>Acebook</title>
-        <link rel="stylesheet" type="text/css" href="/css/styles.css" />
-    </head>
-    <body>
-    <div class="page-container">
-            <!-- Sidebar -->
-            <nav class="sidebar">
-                <h1>AceBook</h1>
-                <a href="/">Feed</a>
-                <a sec:authorize="isAnonymous()" href="/register">Log In</a>
-                <a href="/profile/{id}">Profile</a>
-                <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
-            </nav>
-        <!-- Main Content -->
-        <main class="main-content">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Acebook</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<div class="page-container">
+    <nav class="sidebar">
+        <h1>AceBook</h1>
+        <a href="/">Feed</a>
+        <a sec:authorize="isAnonymous()" href="/register">Log In</a>
+        <a href="/profile/{id}">Profile</a>
+        <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
+    </nav>
 
-            <div class="header">
+    <main class="main-content">
+        <div class="header">
             <img src="/images/profile-img.png" alt="Profile Picture" class="profile-picture">
             <h2 sec:authorize="isAnonymous()" id="greeting">Welcome to Acebook</h2>
-            <h2 sec:authorize="isAuthenticated()" id="greeting">Hello <span sec:authentication="principal.attributes['nickname']"></span>, here's what you've missed</h2>
+            <h2 sec:authorize="isAuthenticated()" id="greeting">
+                Hello <span sec:authentication="principal.attributes['nickname']"></span>, here's what you've missed
+            </h2>
+        </div>
+
+        <form th:action="@{/posts}" th:object="${post}" method="post">
+            <div class="post-input">
+                <textarea th:field="*{content}" id="content" maxlength="250" placeholder="What's on your mind?"></textarea>
+                <div id="counterDisplay">0/250</div>
+                <button type="submit">Post</button>
             </div>
-<form action="#" th:action="@{/posts}" th:object="${post}" method="post">
-    <div class="post-input">
-        <textarea th:field="*{content}" id="content" maxlength="250" placeholder="What's on your mind?"></textarea>
-        <div id="counterDisplay">0/250</div>
-        <button type="submit">Post</button>
-    </div>
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('error') === 'emptyContent') {
-            document.write('<p style="color: red" >Content must not be blank</p>')
-        }
-        if (params.get('error') === 'noUrl') {
-            document.write('<p style="color: red" >Content must not include a URL</p>')
-        }
-    </script>
-</form>
+            <script>
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('error') === 'emptyContent') {
+                    document.write('<p style="color: red">Post cannot be empty</p>');
+                }
+                if (params.get('error') === 'noUrl') {
+                    document.write('<p style="color: red">Posts cannot include a URL</p>');
+                }
+                if (params.get('error') === 'emptyComment') {
+                    document.write('<p style="color: red">Comment cannot be empty</p>');
+                }
+            </script>
+        </form>
 
-    <ul class="post-main"  th:each="post: ${posts}">
-        <li>
-            <p th:text="${post.content}"></p>
-            <p th:text="${post.user.display_name}">Posted by - </p>
-            <p>Likes: <span th:text="${post.likeCount}">0</span></p>
+        <ul class="post-main" th:each="post : ${posts}">
+            <li>
+                <p th:text="${post.content}"></p>
+                <p th:text="${post.user.display_name}">Posted by - </p>
+                <p>Likes: <span th:text="${post.likeCount}">0</span></p>
 
-            <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
-                <button type="submit">👍</button>
-            </form>
+                <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
+                    <button type="submit">👍</button>
+                </form>
+                <form method="post" th:action="@{'/posts/' + ${post.id} + '/unlike'}">
+                    <button type="submit">👎</button>
+                </form>
 
-            <form method="post" th:action="@{'/posts/' + ${post.id} + '/unlike'}">
-                <button type="submit">👎</button>
-            </form>
-            <ul class="comment-list">
-                <li th:each="comment : ${postComments[post.id]}">
-                    <p th:text="${comment.content}"></p>
-                    <p>Likes: <span th:text="${comment.likeCount}">0</span></p>
+                <ul class="comment-list">
+                    <li th:each="comment : ${postComments[post.id]}">
+                        <p>
+                            <strong th:text="${comment.user.display_name}"></strong>:
+                            <span th:text="${comment.content}"></span>
+                        </p>
+                        <p>Likes: <span th:text="${comment.likeCount}">0</span></p>
 
-                    <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">
-                        <button type="submit">👍</button>
-                    </form>
-                    <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">
-                        <button type="submit">👎</button>
-                    </form>
-                </li>
-            </ul>
-            <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
-                <input type="text" name="content" maxlength="500" placeholder="Add a comment..." />
-                <button type="submit">Comment</button>
-            </form>
-        </li>
-    </ul>
+                        <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">
+                            <button type="submit">👍</button>
+                        </form>
+                        <form method="post" th:action="@{'/comments/' + ${comment.id} + '/unlike'}">
+                            <button type="submit">👎</button>
+                        </form>
+
+                        <form method="post"
+                              th:action="@{'/comments/' + ${comment.id} + '/delete'}"
+                              th:if="${currentUser != null and currentUser.id == comment.user.id}"
+                              style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </li>
+                </ul>
+
+                <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post" sec:authorize="isAuthenticated()">
+                    <input type="text" name="content" maxlength="250" placeholder="Add a comment..." />
+                    <button type="submit">Comment</button>
+                </form>
+            </li>
+        </ul>
     </main>
-      
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const ta = document.getElementById('content');
@@ -84,6 +100,6 @@
         });
     });
 </script>
-    </div>
-    </body>
+
+</body>
 </html>

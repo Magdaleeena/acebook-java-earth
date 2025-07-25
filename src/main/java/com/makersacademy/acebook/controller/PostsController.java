@@ -18,74 +18,70 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/posts")
 public class PostsController {
 
     @Autowired
-    PostRepository repository;
+    private PostRepository postRepository;
 
     @Autowired
     private CommentRepository commentRepository;
 
-    @GetMapping("/posts")
-    public String index(Model model) {
-        Iterable<Post> posts = repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    @GetMapping
+    public String listPosts(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        model.addAttribute("currentUser", currentUser);
+
+        Iterable<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
+        model.addAttribute("comment", new Comment());
 
         Map<Long, List<Comment>> postComments = new HashMap<>();
         for (Post post : posts) {
-            List<Comment> sortedComments = commentRepository.findByPostOrderByCreatedAtAsc(post);
-            postComments.put(post.getId(), sortedComments);
+            List<Comment> comments = commentRepository.findByPostOrderByCreatedAtAsc(post);
+            postComments.put(post.getId(), comments);
         }
         model.addAttribute("postComments", postComments);
-        model.addAttribute("comment", new Comment());
+
         return "posts/index";
     }
 
-    @PostMapping("/posts")
-    public RedirectView create(@ModelAttribute Post post, HttpSession session) {
+    @PostMapping
+    public RedirectView createPost(@ModelAttribute Post post, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            System.out.println("User is NULL in POST /posts");
             return new RedirectView("/login");
         }
-        if (post.getContent() == null|| post.getContent().isEmpty()) {
+        String content = post.getContent();
+        if (content == null || content.isBlank()) {
             return new RedirectView("/posts?error=emptyContent");
         }
-        if (post.getContent().matches(".*(https?://|www\\.).*")) {
+        if (content.matches(".*(https?://|www\\.).*")) {
             return new RedirectView("/posts?error=noUrl");
         }
         post.setUser(user);
-        repository.save(post);
+        postRepository.save(post);
         return new RedirectView("/posts");
     }
 
-    @PostMapping("/posts/{id}/like")
-    public RedirectView likePost(@PathVariable Long id) {
-        Post post = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+    @PostMapping("/{postId}/like")
+    public RedirectView likePost(@PathVariable Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
         post.setLikeCount(post.getLikeCount() + 1);
-        repository.save(post);
+        postRepository.save(post);
         return new RedirectView("/posts");
     }
 
-    @PostMapping("/posts/{id}/unlike")
-    public RedirectView unlikePost(@PathVariable Long id) {
-        Post post = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
-        if (post.getLikeCount() <= 0) {
-            throw new IllegalStateException("Cannot unlike post because like count is already zero");
-        }
-        post.setLikeCount(post.getLikeCount() - 1);
-        repository.save(post);
+    @PostMapping("/{postId}/unlike")
+    public RedirectView unlikePost(@PathVariable Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+        int count = post.getLikeCount();
+        if (count > 0) post.setLikeCount(count - 1);
+        postRepository.save(post);
         return new RedirectView("/posts");
     }
 }
-
-
-
-
-
-
-
 
