@@ -13,7 +13,7 @@
                 <h1>AceBook</h1>
                 <a href="/">Feed</a>
                 <a sec:authorize="isAnonymous()" href="/register">Log In</a>
-                <a href="/profile/{id}">Profile</a>
+                <a th:if="${user != null}" th:href="@{/profile/{id}(id=${user.id})}">Profile</a>
                 <a sec:authorize="isAuthenticated()" href="/logout">Sign out</a>
             </nav>
         <!-- Main Content -->
@@ -44,7 +44,7 @@
     <ul class="post-main"  th:each="post: ${posts}">
         <li>
             <p th:text="${post.content}"></p>
-            <p th:text="${post.user.display_name}">Posted by - </p>
+            <a th:href="@{/profile/{id}(id=${post.user.id})}"><p th:text="${post.user.display_name}"></p></a>
             <p>Likes: <span th:text="${post.likeCount}">0</span></p>
 
             <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
@@ -57,6 +57,7 @@
             <ul class="comment-list">
                 <li th:each="comment : ${postComments[post.id]}">
                     <p th:text="${comment.content}"></p>
+                    <a th:href="@{/profile/{id}(id=${comment.user.id})}"><p th:text="${comment.user.display_name}"></p></a>
                     <p>Likes: <span th:text="${comment.likeCount}">0</span></p>
 
                     <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">

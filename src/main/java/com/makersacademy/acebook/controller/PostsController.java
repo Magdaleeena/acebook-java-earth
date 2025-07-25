@@ -27,11 +27,10 @@ public class PostsController {
     private CommentRepository commentRepository;
 
     @GetMapping("/posts")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
         Iterable<Post> posts = repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
-
         Map<Long, List<Comment>> postComments = new HashMap<>();
         for (Post post : posts) {
             List<Comment> sortedComments = commentRepository.findByPostOrderByCreatedAtAsc(post);
@@ -39,6 +38,8 @@ public class PostsController {
         }
         model.addAttribute("postComments", postComments);
         model.addAttribute("comment", new Comment());
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
         return "posts/index";
     }
 
