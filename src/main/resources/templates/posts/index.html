@@ -55,8 +55,16 @@
                 <button type="submit">👎</button>
             </form>
             <ul class="comment-list">
-                <li th:each="comment : ${post.comments}">
+                <li th:each="comment : ${postComments[post.id]}">
                     <p th:text="${comment.content}"></p>
+                    <p>Likes: <span th:text="${comment.likeCount}">0</span></p>
+
+                    <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">
+                        <button type="submit">👍</button>
+                    </form>
+                    <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">
+                        <button type="submit">👎</button>
+                    </form>
                 </li>
             </ul>
             <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
