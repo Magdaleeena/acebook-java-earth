@@ -14,5 +14,9 @@
   <li th:text="${user.username}"></li>
   <li th:text="${user.display_name}"></li>
 </ul>
+<h4>Posts</h4>
+<ol th:each="post : ${posts}">
+  <li th:text="${post.content}"></li>
+</ol>
 </body>
 </html>

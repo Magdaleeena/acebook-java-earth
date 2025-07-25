@@ -66,10 +66,12 @@ public class CommentController {
 
     @PostMapping("/comments/{commentId}/unlike")
     public RedirectView unlikeComment(@PathVariable Long commentId) {
-        var c = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
-        if (c.getLikeCount() > 0) c.setLikeCount(c.getLikeCount() - 1);
-        commentRepository.save(c);
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        if (comment.getLikeCount() > 0) {
+            comment.setLikeCount(comment.getLikeCount() - 1);
+            commentRepository.save(comment);
+        }
         return new RedirectView("/posts");
     }
 }
