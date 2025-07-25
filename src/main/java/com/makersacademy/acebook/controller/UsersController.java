@@ -1,6 +1,8 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.view.RedirectView;
 public class UsersController {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PostRepository postRepository;
 
     @ModelAttribute("user")
     public User addLoggedInUserToModel(Authentication authentication) {
@@ -51,9 +55,11 @@ public class UsersController {
 
     @GetMapping("/profile/{userId}")
     public ModelAndView getUserbyId(@PathVariable("userId") Long userId) {
-        ModelAndView modelAndView = new ModelAndView("/profile/user");
+        ModelAndView modelAndView = new ModelAndView("profile/user");
         User user = userRepository.findById(userId).orElse(null);
+        Iterable<Post> posts = postRepository.findByUserId(userId);
         modelAndView.addObject("user", user);
+        modelAndView.addObject("posts", posts);
         return modelAndView;
     }
 }
