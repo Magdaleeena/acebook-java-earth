@@ -74,11 +74,11 @@ public class PostsController {
   
     @PostMapping("/posts/{id}/unlike")
     public RedirectView unlikePost(@PathVariable Long id) {
-        Post post = repository.findById(id)
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
         if (post.getLikeCount() > 0) {
             post.setLikeCount(post.getLikeCount() - 1);
-            repository.save(post);
+            postRepository.save(post);
         }
       
         return new RedirectView("/posts");
