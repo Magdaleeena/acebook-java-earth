@@ -44,6 +44,7 @@
     <ul class="post-main"  th:each="post: ${posts}">
         <li>
             <p th:text="${post.content}"></p>
+            <p th:text="${post.user.display_name}">Posted by - </p>
             <p>Likes: <span th:text="${post.likeCount}">0</span></p>
 
             <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
