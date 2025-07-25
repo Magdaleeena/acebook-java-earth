@@ -1,0 +1,18 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>User Page</title>
+</head>
+<body>
+<ul>
+  <li th:text="${user.id}"></li>
+  <li th:text="${user.username}"></li>
+  <li th:text="${user.display_name}"></li>
+</ul>
+</body>
+</html>
