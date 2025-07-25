@@ -33,7 +33,7 @@ public class PostsController {
         model.addAttribute("post", new Post());
         Map<Long, List<Comment>> postComments = new HashMap<>();
         for (Post post : posts) {
-            List<Comment> sortedComments = commentRepository.findByPostOrderByCreatedAtAsc(post);
+            List<Comment> sortedComments = commentRepository.findByPostOrderByCreatedAtAscIdAsc(post);
             postComments.put(post.getId(), sortedComments);
         }
         model.addAttribute("postComments", postComments);
