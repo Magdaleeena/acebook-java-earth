@@ -20,9 +20,10 @@
         <main class="main-content">
 
             <div class="header">
-            <img src="/images/profile-img.png" alt="Profile Picture" class="profile-picture">
-            <h2 sec:authorize="isAnonymous()" id="greeting">Welcome to Acebook</h2>
-            <h2 sec:authorize="isAuthenticated()" id="greeting">Hello <span sec:authentication="principal.attributes['nickname']"></span>, here's what you've missed</h2>
+                <img src="/images/profilepic.webp" alt="Profile Picture" class="profile-picture">
+                <h2 sec:authorize="isAnonymous()" id="greeting">Welcome to Acebook</h2>
+                <h2 sec:authorize="isAuthenticated()" id="greeting">Hello <span sec:authentication="principal.attributes['nickname']"></span>, here's what you've missed</h2>
+                <p sec:authorize="isAnonymous()" class="tagline">Connect with friends and the world around you on Acebook.</p>
             </div>
 <form action="#" th:action="@{/posts}" th:object="${post}" method="post">
     <div class="post-input">
@@ -44,13 +45,11 @@
     <ul class="post-main"  th:each="post: ${posts}">
         <li>
             <p th:text="${post.content}"></p>
-            <p>
-                Posted by <span th:text="${post.user.display_name}">User</span>
 <!--                on <span th:text="${#temporals.format(post.createdAt, 'dd MMM yyyy HH:mm')}">Time</span>-->
-            </p>
-            <a th:href="@{/profile/{id}(id=${post.user.id})}"><p th:text="${post.user.display_name}"></p></a>
 
-            <p>Likes: <span th:text="${post.likeCount}">0</span></p>
+
+            <p>Posted by <a th:href="@{/profile/{id}(id=${post.user.id})}" th:text="${post.user.display_name}"></a>
+                ● Likes: <span th:text="${post.likeCount}">0</span></p>
 
             <form method="post" th:action="@{'/posts/' + ${post.id} + '/like'}">
                 <button type="submit">👍</button>
@@ -63,27 +62,25 @@
                 <li th:each="comment : ${postComments[post.id]}">
                     <p>
                         <span th:text="${comment.content}">Comment content</span>
-                    </p>                  
-                    <a th:href="@{/profile/{id}(id=${comment.user.id})}"><p th:text="${comment.user.display_name}"></p></a>
-                    <p>Likes: <span th:text="${comment.likeCount}">0</span></p>
+                    </p>
+                        <p><a th:href="@{/profile/{id}(id=${comment.user.id})}"><span th:text="${comment.user.display_name}"></span></a>
+                            ● Likes: <span th:text="${comment.likeCount}">0</span> ●
+                                Commented on <span th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy HH:mm')}"></span></p>
                     <form method="post" th:action="@{'/comments/' + ${comment.id} + '/like'}">
                         <button type="submit">👍</button>
                     </form>
                     <form method="post" th:action="@{'/comments/' + ${comment.id} + '/unlike'}">
                         <button type="submit">👎</button>
                     </form>
-                    <span class="comment-author" th:text="${comment.user.display_name}"></span>
-                    <small class="tiny-text">
-                        Commented on <span th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy HH:mm')}"></span>
-                    </small>
                 </li>
             </ul>
-            <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
-                <input type="text" name="content" maxlength="500" placeholder="Add a comment..." />
-                <button type="submit">Comment</button>
-            </form>
+                <form class="comment-form" th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
+                    <textarea type="text" name="content" maxlength="500" placeholder="Add a comment..."></textarea>
+                    <button type="submit">Comment</button>
+                </form>
         </li>
     </ul>
+            <div class="top-cover"></div>
     </main>
       
 <script>
