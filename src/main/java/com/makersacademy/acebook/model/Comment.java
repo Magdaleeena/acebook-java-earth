@@ -14,6 +14,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int likeCount;
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
@@ -38,4 +39,6 @@ public class Comment {
         this.user = user;
         this.content = content;
     }
+
+    public Comment (Integer likeCount) {this.likeCount = likeCount;}
 }

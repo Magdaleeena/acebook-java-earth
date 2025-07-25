@@ -7,9 +7,11 @@ import com.makersacademy.acebook.repository.CommentRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -30,7 +32,6 @@ public class CommentController {
             @PathVariable Long postId,
             @RequestParam String content,
             @AuthenticationPrincipal OidcUser principal) {
-        //do not allow empty comments to be submitted
         if (content.trim().isEmpty()) {
             return new RedirectView("/posts?error=emptyComment");
         }
@@ -40,6 +41,27 @@ public class CommentController {
         User user = userRepository.findUserByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Comment comment = new Comment(post, user, content);
+        commentRepository.save(comment);
+        return new RedirectView("/posts");
+    }
+
+    @PostMapping("/comments/{commentId}/like")
+    public RedirectView likeComment(@PathVariable Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        comment.setLikeCount(comment.getLikeCount() + 1);
+        commentRepository.save(comment);
+        return new RedirectView("/posts");
+    }
+
+    @PostMapping("/comments/{commentId}/unlike")
+    public RedirectView unlikeComment(@PathVariable Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        if (comment.getLikeCount() <= 0) {
+            throw new IllegalStateException("Cannot unlike post because like count is already zero");
+        }
+        comment.setLikeCount(comment.getLikeCount() - 1);
         commentRepository.save(comment);
         return new RedirectView("/posts");
     }
