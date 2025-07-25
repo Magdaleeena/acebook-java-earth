@@ -58,11 +58,10 @@ public class CommentController {
     public RedirectView unlikeComment(@PathVariable Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
-        if (comment.getLikeCount() <= 0) {
-            throw new IllegalStateException("Cannot unlike post because like count is already zero");
+        if (comment.getLikeCount() > 0) {
+            comment.setLikeCount(comment.getLikeCount() - 1);
+            commentRepository.save(comment);
         }
-        comment.setLikeCount(comment.getLikeCount() - 1);
-        commentRepository.save(comment);
         return new RedirectView("/posts");
     }
 }
