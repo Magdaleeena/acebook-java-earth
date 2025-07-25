@@ -20,7 +20,7 @@
         <main class="main-content">
 
             <div class="header">
-                <img src="/images/profilepic.webp" alt="Profile Picture" class="profile-picture">
+                <img sec:authorize="isAuthenticated()"  src="/images/profilepic.webp" alt="Profile Picture" class="profile-picture">
                 <h2 sec:authorize="isAnonymous()" id="greeting">Welcome to Acebook</h2>
                 <h2 sec:authorize="isAuthenticated()" id="greeting">Hello <span sec:authentication="principal.attributes['nickname']"></span>, here's what you've missed</h2>
                 <p sec:authorize="isAnonymous()" class="tagline">Connect with friends and the world around you on Acebook.</p>
