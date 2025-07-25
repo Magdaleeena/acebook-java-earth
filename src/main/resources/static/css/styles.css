@@ -148,3 +148,8 @@ body, html {
 html {
     scroll-behavior: smooth;
 }
+.tiny-text {
+  font-size: 0.6em;
+  color: #999;
+}
+

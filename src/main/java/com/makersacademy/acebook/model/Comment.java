@@ -2,6 +2,7 @@ package com.makersacademy.acebook.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +28,10 @@ public class Comment {
     @Column(nullable = false, length = 500)
     private String content;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
 
     public Comment(Post post, String content) {
         this.post = post;
